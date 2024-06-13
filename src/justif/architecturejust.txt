@@ -1,0 +1,2 @@
+why neural network? 
+maybe use another architecture

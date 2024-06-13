@@ -1,7 +1,7 @@
 import _mutationpp as mpp
 import numpy as np
 
-def setup_mpp():
+def setup_mpp(input_directory):
     """
     Function that sets up the mixture.
 
@@ -11,7 +11,7 @@ def setup_mpp():
         Mixture object from the mpp module.     
     """
 
-    with open('../input.in', 'r') as f:
+    with open(input_directory, 'r') as f:
         lines = f.readlines()
 
     mixture = lines[12].strip()

@@ -3,14 +3,14 @@ REBUILDING OPTION
 ---------------------------------
 Inverse
 -
-True
+False
 -
 ---------------------------------
 MIXTURE OPTIONS
 ---------------------------------
 Mixture type
 -
-air_11
+air_5
 -
 Thermodynamics
 -
@@ -25,19 +25,19 @@ FORWARD INPUT PARAMETERS
 ---------------------------------
 Free stream temperature
 -
-3500.0
+243
 -
 Free stream pressure
 -
-5000.0
+18.53
 -
 Free stream Mach number
 -
-2.0
+26.3
 -
 Throat area
 -
-9.621e-04
+3.2816e-3
 -
 Prandtl number
 -
@@ -49,11 +49,11 @@ Lewis number
 -
 Effective radius
 -
-0.025
+0.48
 -
 Surface temperature
 -
-350.0
+293.15
 -
 ---------------------------------
 INVERSE INPUT PARAMETERS
@@ -65,20 +65,20 @@ Residual
 Measurements to rebuild from
 -
 Heat_flux
-Stagnation_pressure
 Reservoir_pressure
+Stagnation_pressure
 -
 Heat_flux
 -
-16323445.95
+1932239.3872
 -
 Stagnation_pressure
 -
-51571.17
+9040.8918
 -
 Reservoir_pressure
 -
-268261.66
+3696835.8090
 -
 Reservoir_temperature
 -
@@ -86,7 +86,7 @@ Reservoir_temperature
 -
 Total_enthalpy
 -
-4
+5317753.4016
 -
 Stagnation_density
 -
@@ -131,7 +131,7 @@ Initial temperature
 -
 Initial pressure
 -
-10000.0
+100000.0
 -
 Robust
 -
@@ -149,17 +149,17 @@ Initial pressure
 -
 Robust
 -
-No
+Yes
 -
 Shocking
 -
 Initial ratio
 -
-0.2
+0.4
 -
 Robust
 -
-No
+Yes
 -
 Total quantities
 -

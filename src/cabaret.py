@@ -1,6 +1,14 @@
 ## Importing local mutationpp python module ##
 import sys
 import os
+cabaret_src_folder = '/Users/jeannelonglune/Desktop/memoire/Mutationpp-master/src' # Change to your folder path
+sys.path.insert(0, cabaret_src_folder)
+
+mutation_folder = "/Users/jeannelonglune/Desktop/memoire/Mutationpp-master/" # Your folder
+my_distribution = "macosx-13.0-arm64-3.11" # Your particular distribution
+sys.path.append(mutation_folder + "_skbuild/" + my_distribution +"/cmake-install/interface/python/mutationpp")
+
+## Importing local mutationpp python module ##
 mppPyDir=os.environ.get('MPP_LOCALPY')
 sys.path.append(mppPyDir)
 ##
@@ -15,7 +23,8 @@ import time
 start_time = time.time()
 
 input_dict = input_data.reading_input()
-mix = setup.setup_mpp()
+mix = setup.setup_mpp('/Users/jeannelonglune/Desktop/memoire/pyCabaret/input.in')
+
 
 if input_dict["inverse"] == 'True':
     output = inverse(input_dict["measurements"],input_dict,mix)

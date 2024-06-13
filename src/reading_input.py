@@ -10,7 +10,7 @@ def reading_input():
         Dictionary describing the information contained in the input file.    
     """
 
-    with open('../input.in', 'r') as f:
+    with open('/Users/jeannelonglune/Desktop/memoire/pyCabaret/input.in', 'r') as f:
         lines = f.readlines()
 
     input_parameters = {"freestream":{"Temperature": float(lines[27].strip()), "Pressure": float(lines[31].strip()), "Mach": float(lines[35].strip())},

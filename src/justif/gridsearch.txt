@@ -1,0 +1,26 @@
+To be able to find the best model, a gridsearch has been made. 
+
+Here is the current gridsearch : 
+param_grid = {
+    'hidden_layer_sizes': [(32,), (64,), (64, 32), (32, 64), (64, 32, 32), (32, 32, 64), (32, 32, 32, 64), (64, 32, 32, 32, 32)],
+    'activation': ['relu', 'tanh', 'linear'],
+    'alpha': [0.0001, 0.001, 0.01],  # amount of regularization applied to the neural network's weights during training
+    'learning_rate': ['constant', 'adaptive'],
+    'learning_rate_init': [0.0005, 0.001, 0.004, 0.005, 0.006, 0.007, 0.008, 0.01, 0.011, 0.1, 0.0065, 0.0055],  # Numeric values for initial learning rates
+    'solver': ['lbfgs', 'sgd', 'adam'],  # Different solvers use different loss functions
+}
+
+variation description 
+- hidden layers : from 1 to 5 hidden layers
+- neurons : balancing between 32, 64, with different combination (try to justify this choise a bit more)
+- activation layer : 3 different type (the choise is explain the the folder 'justif' in the file 'activationjust.txt')
+- regularization : 3 different
+- learning-rate 
+    - constant and adaptative (explain)
+    - numerical values 
+- solver : 3 differents solvesr (the choise is explain the the folder 'justif' in the file 'solverjust.txt')
+
+MAYBE ADD A VARIATION IN THE NUMBER OF EPOCH? Or is it enough to justify the number of epoch by the evolution of the loss function on the best find gridsearch? 
+MAYBE ADD A TIMER FOR EACH METHOD? 
+
+QUESTION : for the moment I have a 5 layer model, but is it not overkilled? 

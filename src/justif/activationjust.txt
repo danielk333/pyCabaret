@@ -1,0 +1,61 @@
+Some commonly used activation layer : 
+
+1. Linear Activation (Identity function):
+   - Equation: f(x) = x
+   - Outputs the input as it is, commonly used for regression tasks.
+
+2. ReLU (Rectified Linear Unit):
+   - Equation: f(x) = max(0, x)
+   - Sets negative values to zero, allowing only positive values to pass through.
+
+3. Sigmoid Activation:
+   - Equation: f(x) = 1 / (1 + e^(-x))
+   - Squeezes the output between 0 and 1, useful when the target values are in a binary range.
+
+4. Tanh (Hyperbolic Tangent) Activation:
+   - Equation: f(x) = (2 / (1 + e^(-2x))) - 1
+   - Similar to the sigmoid but outputs values between -1 and 1.
+
+5. Softmax Activation:
+   - Equation: f(x)_i = e^(x_i) / Σ(e^(x_j)) for all j
+   - Used when there are multiple output classes, normalizing the values into a probability distribution.
+
+6. Swish Activation:
+   - Equation: f(x) = x / (1 + e^(-x))
+   - Smooth variant of the ReLU function, proposed to capture both linearity and non-linearity.
+
+7. Leaky ReLU:
+   - Equation: f(x) = x if x > 0, else alpha * x where alpha is a small constant.
+   - Allows a small negative slope for the negative input values.
+
+8. Parametric ReLU (PReLU):
+   - Equation: f(x) = x if x > 0, else alpha * x where alpha is a learnable parameter.
+   - Similar to Leaky ReLU but with the slope being a trainable parameter.
+
+9. Exponential Linear Unit (ELU):
+   - Equation: f(x) = x if x > 0, else alpha * (e^x - 1) where alpha is a small positive constant.
+   - Smoothly saturates negative values to avoid dead neurons.
+
+10. Scaled Exponential Linear Unit (SELU):
+    - A variation of ELU with a specific scaling factor that aims to maintain a mean close to 0 and a standard deviation close to 1 during training.
+
+
+Justification of the activation layer choice : 
+To be able to choose the right activation layer the first step is to analyse the data : 
+input interval :
+- altitude [50, 70]
+- rad [18, 28]
+- mach [0.1, 1]
+output interval : 
+- heatflux [278553.6823793459, 16923184.061487466]
+According to the physics of the problem there would be no negative values, and for the moment the relations seems to be quite
+linear. As it might be seen on the graphs showing the relation between the different input and the output.
+
+In our case the choise might go to
+- Linear Activation Function: because of the observed linearity in the relationships between the input variables (altitude, rad, mach) and the output variable (heatflux)
+
+- Rectified Linear Unit (ReLU): widely use, enable to introduces non-linearity by allowing >= 0 values. 
+
+- Hyperbolic Tangent (tanh):provides stronger non-linearity compared to the sigmoid function. 
+
+This is why those X type of activation layers will be included in the gridsearch.

@@ -1,0 +1,4 @@
+Cross validation : TODO IF MORE COMPLEXE MODEL 
+Is a method that will test the model on a part of the data set after each epoch, in a dynamic way, and during the training. 
+It enable to have more accurate results and is a good way to evaluate complexe problems. 
+Might not be necessary for a simple problem like the one we have now, but might be usefull if the complexity of the model increase. 

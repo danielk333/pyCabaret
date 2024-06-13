@@ -1,3 +1,4 @@
+import config.muttconfig
 import _mutationpp as mpp
 import rebuilding_setup as setup
 from reservoir import reservoir
@@ -48,7 +49,7 @@ def forward(preshock_state,resmin,A_t,reff,T_w,pr,L,mix,print_info,options):
     M_1 = preshock_state[2]
 
     # Setting up the free stream quantities
-    mix = setup.setup_mpp()
+    mix = setup.setup_mpp('/Users/jeannelonglune/Desktop/memoire/pyCabaret/input.in')
     setup.mixture_states(mix)["free_stream"].equilibrate(T_1,p_1)
     rho_1 = setup.mixture_states(mix)["free_stream"].density()
     v_1 = M_1*setup.mixture_states(mix)["free_stream"].equilibriumSoundSpeed()

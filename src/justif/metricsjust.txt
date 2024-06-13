@@ -1,0 +1,48 @@
+*Regression*
+- deals with predicting continuous values.
+- output: real number
+- model learns to map input features to this continuous output.
+*Classification*
+- deals with assigning data points to predefined categories.
+- output : output variable is discrete and represents a class label
+- performance metrics : accuracy, precision, recall, F1-score.
+
+
+Regression performance metrics :
+1. Mean Absolute Error (MAE):
+   - The average absolute differences between the predicted and actual values.
+   - Formula: MAE = (1/n) * Σ |y_i - ŷ_i|
+
+2. Mean Squared Error (MSE):
+   - The average of the squared differences between the predicted and actual values.
+   - Formula: MSE = (1/n) * Σ (y_i - ŷ_i)^2
+
+3. Root Mean Squared Error (RMSE):
+   - The square root of the MSE, providing a measure in the original unit of the target variable.
+   - Formula: RMSE = √MSE
+
+4. Mean Absolute Percentage Error (MAPE):
+   - Expresses errors as a percentage of the actual values.
+   - Formula: MAPE = (1/n) * Σ |(y_i - ŷ_i)/y_i| * 100
+
+5. (R-squared (Coefficient of Determination):)
+   - Measures the proportion of the variance in the dependent variable that is predictable from the independent variables.
+   - Ranges from 0 to 1, where 1 indicates a perfect fit.
+   - Formula: R^2 = 1 - Σ (y_i - ŷ_i)^2 / Σ (y_i - ȳ)^2, where ȳ is the mean of the actual values.
+
+6. (Explained Variance Score (EVS):)
+   - Similar to R-squared, it measures the proportion of variance explained by the model.
+   - Ranges from 0 to 1, where 1 indicates a perfect fit.
+   - Formula: EVS = 1 - Var(y - ŷ) / Var(y)
+
+7. (Max Error:)
+   - The maximum absolute error between predicted and actual values.
+   - Formula: Max Error = max(|y_i - ŷ_i|)
+
+8. (Mean Squared Logarithmic Error (MSLE):)
+   - The mean of the logarithmic differences between predicted and actual values.
+   - Particularly useful when the target variable has exponential growth.
+   - Formula: MSLE = (1/n) * Σ (log(1 + y_i) - log(1 + ŷ_i))^2
+
+
+I have strange results for MAE, MAPE, MSE, don't know how to interpret it. 

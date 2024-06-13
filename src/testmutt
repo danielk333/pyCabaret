@@ -1,0 +1,116 @@
+## Importing local mutationpp python module ##
+import sys
+import os
+import numpy as np
+import config.muttconfig
+import rebuilding_setup as setup
+import reading_input as input_data
+
+from shock import shock
+from pathlib import Path
+from atmUS76 import Atmosphere
+
+
+# Define gas
+from shock import shock
+import _mutationpp as mpp
+print(mpp)
+
+
+opts = ("N.xml")
+mix = mpp.Mixture(opts)
+#I REMOVED SUBLIMATION : add again
+
+# Setting up
+set_state_with_rhoi_T = 1 #WHAT IS THAT?
+pos_T_trans = 0
+ns = mix.nSpecies()
+nT = mix.nEnergyEqns()
+
+Tw = 2500.0
+
+print("\n--- FREE STREAM CONDITIONS ---")
+M_1 = 28.56
+reff = 0.48 #NEVER USE REFF?????
+alt = 70 
+
+p_1 = Atmosphere(alt)[0]
+T_1 = Atmosphere(alt)[1]
+
+preshock_state = [T_1,p_1,M_1]
+print(preshock_state)
+#[219.58076564683952, 5.219719752495632, 28.56]
+options1 = {"ratio": 0.2,  #limit bf infinite loop is 0.33 #initial guess rho1/rho2
+        "robust": "Yes"}
+
+print("\n--- SHOCK ---")
+T2,p2,v2 = shock(preshock_state,mix,options1)
+mix.equilibrate(T2, p2)
+rhoigas =  mix.densities() #post shock partial densities.
+Xgas = mix.X()
+rhoi =mix.densities() 
+#setup.mixture_states(mix)["total"].density() #NOT SURE ABOUT THIS
+M = 28.965
+R=8.31446261815324
+#rhoi2 = p2 * M / (T2 * R)
+#print('\n rhoi2', rhoi2)
+print( T2,p2,v2, rhoi)
+#9483.662372059795 85173.7167129109 615.9674346854572 0.01566500348597223
+
+
+mix.setState(rhoi, T2, set_state_with_rhoi_T) #o know gas properties you need to know 2 properties
+xi_e = np.array(mix.X()) #molar fraction
+
+
+#T_s = np.ones(nT) * Tw #make hypothesis
+#T_s = VectorXd.Constant(nT, 6000.)  # change 6000 to the right value (surface temperature)
+
+# Mass gradient
+dx = 1e-2  # to be changed to the right value
+
+# see Newton method, tentative value
+#rhoi_s = xi_e.copy()  # equal to gas value
+mix.setSurfaceState(rhoigas, Tw, set_state_with_rhoi_T)
+mix.setDiffusionModel(xi_e, dx)
+mix.solveSurfaceBalance()
+[rhoiwall, Twall] = mix.getSurfaceState(set_state_with_rhoi_T)
+
+mix.setState(rhoiwall, Twall, set_state_with_rhoi_T) #o know gas properties you need to know 2 properties
+
+
+#Get surface mass fractions
+print("\nSurface mass fractions:")
+for i in range(mix.nSpecies()):
+    print(mix.speciesName(i) + ": " + str(rhoiwall[i] / rhoiwall.sum()))
+
+# Get surface production rates
+wdot = np.zeros(ns)
+wdot = mix.surfaceReactionRates()
+print("\nSurface reaction rates:")
+for i in range(mix.nSpecies()):
+    print(mix.speciesName(i) + ": " + str(wdot[i]))
+
+# Blowing flux (should be zero for catalysis)
+mblow = mix.getMassBlowingRate()
+print("\nMass blow [kg/(m^2-s)]: " + str(mblow))
+
+# postprocessing
+mix.setState(rhoi, Tw, set_state_with_rhoi_T)
+E_field = 0.0
+lambda_ = mix.frozenThermalConductivity() #SHOULD SWITCH TO EQUILIBRIUM ? 
+xw = 1 #pure carbon
+qcond = lambda_ * (T2 - Tw) / dx #gradient
+v_b = (xi_e - xw) / dx  # mass fractions
+v_Vd_sm = np.zeros(ns)
+v_Vd_sm, E_field = mix.stefanMaxwell(v_b)
+print('v_Vd_sm', v_Vd_sm)
+qdiff = 0
+h = mix.speciesHOverRT() *R *T2
+print('h', h)
+qdiff = np.sum(v_Vd_sm * rhoi * h)
+print('qdiff', qdiff)
+print('qcond', qcond)
+print('q', qcond+qdiff)
+
+print('with cabaret : Qw = 1597900.16 W/m2 with the same input param')
+# You might need to replace some functions or classes with their corresponding Python equivalents.

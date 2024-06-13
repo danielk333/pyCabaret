@@ -1,0 +1,129 @@
+## Importing local mutationpp python module ##
+import sys
+import os
+import numpy as np
+import config.muttconfig
+
+from shock import shock
+from pathlib import Path
+
+
+# Define gas
+from shock import shock
+import _mutationpp as mpp
+print(mpp)
+
+
+opts = ("N.xml")
+mix = mpp.Mixture(opts)
+#I REMOVED SUBLIMATION : add again
+
+# Setting up
+set_state_with_rhoi_T = 1
+pos_T_trans = 0
+ns = mix.nSpecies()
+nT = mix.nEnergyEqns()
+
+print("\n--- Gas ---")
+
+# Define gas conditions (T = 6000 K and p = 1000 Pa)
+Teq = np.ones(nT) * 6000
+#Teq = VectorXd.Constant(nT, 6000.)
+Peq = 1000.  # Pa
+
+# Equilibrium composition
+mix.equilibrate(Teq[pos_T_trans], Peq)
+# function to get Tg and rhoi from Cabaret
+
+
+## Initialization ##
+import rebuilding_setup as setup
+import reading_input as input_data
+input_dict = input_data.reading_input()
+from forward import forward
+
+preshock_state = [input_dict["freestream"]["Temperature"],input_dict["freestream"]["Pressure"],input_dict["freestream"]["Mach"]]
+output = forward(preshock_state,input_dict["residual"],input_dict["throat_area"],input_dict["effective_radius"],input_dict["surface_temperature"],input_dict["Prandtl"],input_dict["Lewis"],mix,input_dict["print_info"],input_dict["options"])
+print('output', output)
+print('-----OUTPUT------', output)
+"""preshock_state : 1D array of size 2
+        Temperature and pressure of the pre shock state."""
+setup.mixture_states(mix)["free_stream"].equilibrate(preshock_state[0],preshock_state[1])
+rhoi = setup.mixture_states(mix)["free_stream"].density()
+print('rhoi', rhoi)
+#v_1 = preshock_state[2]*setup.mixture_states(mix)["free_stream"].equilibriumSoundSpeed()
+
+
+Tg = output["Reservoir_temperature"]  #from cabaret
+#print(type(Tg))
+#print(type(rhoi))
+#print(type(set_state_with_rhoi_T))
+mix.setState(rhoi, Tg, set_state_with_rhoi_T)
+
+T_s = np.ones(nT) * 2500 #make hypothesis
+#T_s = VectorXd.Constant(nT, 6000.)  # change 6000 to the right value (surface temperature)
+
+# Mass gradient
+xi_e = np.array(mix.X())
+dx = 1e-2  # to be changed to the right value
+
+# see Newton method, tentative value
+rhoi_s = xi_e.copy()  # equal to gas value
+
+#classe de mix est une classe fille et la fonciton ici est def de la classe mère et non de la classe fille. 
+# Solving mass balance
+#import cwrapper
+#print(rhoi_s)
+#print(type(rhoi_s))
+#rhoi_s = [1.0, 3.0, 3.0]
+#rhoi_s = np.array(rhoi_s, dtype=float)
+#print(type(rhoi_s[0]))
+#T_s = [1.2, 3.2, 3.1]
+#print(T_s)
+#set_state_with_rhoi_T = 1
+#print(set_state_with_rhoi_T)
+#def a wall temp JUSTIFIER CE CHOIX (PT UN PEU BAS)
+Tw = 2500.0 # Wall temperature EXPORT FROM INPUTTTT WILL NEED TO VARY IN THE FINAL MODEL 
+#SO MODELE(ALT, SIZE, SPEED, WALL TEMP)
+mix.setSurfaceState(rhoi_s, Tw, set_state_with_rhoi_T)
+mix.setDiffusionModel(xi_e, dx)
+
+mix.solveSurfaceBalance()
+mix.getSurfaceState(set_state_with_rhoi_T)
+
+print("\nSurface mass fractions:")
+for i in range(mix.nSpecies()):
+    print(mix.speciesName(i) + ": " + str(rhoi_s[i] / rhoi_s.sum()))
+
+# Get surface production rates
+wdot = np.zeros(ns)
+wdot = mix.surfaceReactionRates()
+print("\nSurface reaction rates:")
+for i in range(mix.nSpecies()):
+    print(mix.speciesName(i) + ": " + str(wdot[i]))
+
+# Blowing flux (should be zero for catalysis)
+mblow = mix.getMassBlowingRate()
+print("\nMass blow [kg/(m^2-s)]: " + str(mblow))
+
+
+# postprocessing
+mix.setState(rhoi_s, Tw, set_state_with_rhoi_T)
+E_field = 0.0
+lambda_ = mix.frozenThermalConductivity()
+xw = 1
+qcond = lambda_ * (Tg - Tw) / dx  #Tw : temperature of the wall
+v_b = (xi_e - xw) / dx  # mass fractions
+v_Vd_sm = np.zeros(ns)
+v_Vd_sm, E_field = mix.stefanMaxwell(v_b) 
+print('v_Vd_sm', v_Vd_sm)
+qdiff = 0
+R=8.31446261815324
+h = mix.speciesHOverRT() *R *Tw
+print('h', h)
+qdiff = np.sum(v_Vd_sm * rhoi_s * h)
+print('qdiff', qdiff)
+print('qcond', qcond)
+print('q', qcond+qdiff)
+
+# You might need to replace some functions or classes with their corresponding Python equivalents.

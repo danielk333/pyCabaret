@@ -1,0 +1,44 @@
+Some commonly used scaling techniques:
+
+1. Min-Max Normalization:
+   Formula: X_norm = (X - X_min) / (X_max - X_min)
+   This technique scales values to an interval between 0 and 1.
+
+2. Standardization (Z-score normalization):
+   Formula: X_std = (X - μ) / σ
+   Reduces data to have a mean (μ) of 0 and a standard deviation (σ) of 1.
+
+3. Decimal Scaling:
+   Divides each value by a power of 10 to bring them into the interval [-1, 1].
+
+4. Robust Scaling:
+   Uses median and interquartile range to scale data, making it robust to outliers.
+
+5. Log Transformation:
+   Applies the logarithm to all values, often used when data distribution is highly skewed.
+
+6. Power Transformation (Box-Cox Transformation):
+   Uses a parametric transformation to stabilize variance and make the distribution more normal.
+
+7. Unit Vector Transformation:
+   Normalizes each input vector to unit length.
+
+8. PCA (Principal Component Analysis):
+   Uses singular value decomposition to project data into a reduced-dimensional space.
+
+9. Feature Scaling by Range:
+   Scales features within a specified range.
+
+10. Feature Scaling by Quantile:
+    Scales features based on quantiles (percentiles).
+
+
+To be able to choose the right  scaler the first step is to analyse the data : 
+input interval :
+- altitude [50, 70]
+- rad [18, 28]
+- mach [0.1, 1]
+output interval : 
+- heatflux [278553.6823793459, 16923184.061487466]
+
+Standard Scaler is is useful when the features in your data have different ranges, this is why it has been chosen in our case. 

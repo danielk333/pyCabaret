@@ -1,0 +1,28 @@
+Guidelines for chosing a solver:
+
+- Dataset Size: 
+Small to medium-sized: 'lbfgs' 
+For larger datasets, consider 'sgd' or 'adam.'
+Our data size for the moment is 1000 point so 3000 input and 1000 output.
+
+- Computational Efficiency: 
+'sgd' and 'adam' are designed for efficiency on large datasets
+
+- Convergence Behavior: 
+ifferent solvers may converge at different rates. If one solver is struggling to converge, trying another one might be beneficial.
+
+- Regularization : (technique to prevent overfitting)
+L1 reg : 
+L2 ref : 
+
+
+
+'lbfgs' (Limited-memory Broyden–Fletcher–Goldfarb–Shanno): (by default on scikit-learn)
+A quasi-Newton optimization method that is well-suited for problems with a moderate number of samples. 
+It is often used when the dataset is not too large.
+'sgd' (Stochastic Gradient Descent):
+An optimization algorithm that updates the model parameters using the gradients of the loss function with respect to the parameters. 
+It processes a random subset of the training data in each iteration.
+'adam' (Adaptive Moment Estimation):
+An adaptive optimization algorithm that computes individual adaptive learning rates for each parameter. 
+It is often used in the context of deep learning but can be applied to logistic regression as well.
