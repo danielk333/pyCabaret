@@ -116,7 +116,7 @@ def shock(preshock_state,mix,options):
     ## Initialization ##
     setup.mixture_states(mix)["free_stream"].equilibrate(preshock_state[0],preshock_state[1])
     rho_1 = setup.mixture_states(mix)["free_stream"].density()
-    v_1 = preshock_state[2]*setup.mixture_states(mix)["free_stream"].equilibriumSoundSpeed()
+    v_1 = preshock_state[2]
     h_1 = setup.mixture_states(mix)["free_stream"].mixtureHMass()
 
     ## Conserved quantities ##
